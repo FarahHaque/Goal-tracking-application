@@ -5,7 +5,10 @@ use App\Http\Controllers\GoalController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UseraddController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\CollaborationController;
 /*
+
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -41,14 +44,20 @@ Route::group(['middleware' => 'auth'], function () {
         'goal' => GoalController::class,
         'task' => TaskController::class,
         'user' => UseraddController::class,
-
+        'payment' => PaymentController::class
 
      /*   'mygoal' => MygoalController::class,
         'mytask' => MytaskController::class,
         'myprofile' => MyprofileController::class*/
     ]);
  
- 
+    Route::get('/payment-approve/{id}',[PaymentController::class, 'approve'])->name('payment.approve');
+    
+    Route::get('/payment-disapprove/{id}',[PaymentController::class, 'disapprove'])->name('payment.disapprove');
+    Route::get('/search_user/{id}',[CollaborationController::class,'listUser'])->name('all_users');
+    Route::post('/send-offer',[CollaborationController::class,'send'])->name('send_offer');
+    Route::post('/accept-offer',[CollaborationController::class,'accept'])->name('accept_offer');
+    Route::get('invitation-goal',[CollaborationController::class, 'collab'])->name('invitation_goal');
  });
  
  

@@ -25,10 +25,12 @@
              <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Goal</h3>
-                
-              
-                <a href="{{route('goal.create')}}" class="float-right btn btn-outline-dark btn-sm mb-2"><i class="fas fa-plus-square"></i></a>
         
+
+                <a href="{{route('goal.create')}}" class="float-right btn btn-outline-dark btn-sm mb-2"><i class="fas fa-plus-square"></i></a>
+                
+            
+
                
               </div>
               <!-- /.card-header -->
@@ -90,6 +92,10 @@
                        @csrf
                        <button class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i></button>
                    </form>
+
+                   @if (Auth::user()->role == "user")
+                   <a href="{{route('all_users',[$item->id])}}" title="Add Collaborator" class=" btn btn-outline-secondary btn-sm mb-2"><i class="fas fa-plus-square"></i> </a>
+                   @endif
           
                
                    </td>

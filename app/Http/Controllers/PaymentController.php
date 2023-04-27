@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use Illuminate\Http\Request;
+use Auth;
+use Carbon\Carbon;
 
 class PaymentController extends Controller
 {
@@ -15,6 +17,19 @@ class PaymentController extends Controller
     public function index()
     {
         //
+        $startDate = Carbon::now()->startOfMonth();
+        $endDate = Carbon::now()->endOfMonth();
+        $payment = Payment::whereBetween('created_at', [$startDate, $endDate])->orderBy('id','desc')->get();
+        $paymentCount = Payment::whereBetween('created_at', [$startDate, $endDate])->count();
+        if(Auth::user()->role == "admin"){
+            $payment = Payment::whereBetween('created_at', [$startDate, $endDate])->orderBy('id','desc')->get();
+            $paymentCount = Payment::whereBetween('created_at', [$startDate, $endDate])->count();
+        }elseif(Auth::user()->role == "user"){
+            $payment = Payment::where('user_id',Auth::user()->id)->whereBetween('created_at', [$startDate, $endDate])->orderBy('id','desc')->first();
+            $paymentCount = Payment::where('user_id',Auth::user()->id)->whereBetween('created_at', [$startDate, $endDate])->count();
+        }
+
+        return view('admin.payment.index',['payment'=>$payment,'paymentCount'=> $paymentCount,]);  
     }
 
     /**
@@ -25,6 +40,7 @@ class PaymentController extends Controller
     public function create()
     {
         //
+        return view('admin.payment.create');
     }
 
     /**
@@ -35,7 +51,8 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $payment = Payment::create($request->all());
+        return redirect()->route('payment.index')->with('success','Data inserted successfully');
     }
 
     /**
@@ -81,5 +98,23 @@ class PaymentController extends Controller
     public function destroy(Payment $payment)
     {
         //
+    }
+
+    public function approve($id)
+    {
+        # code...
+        $payment = Payment::find($id);
+        $payment->status = 1;
+        $payment->save();
+         return redirect()->back()->with('success','Data updated successfully!');
+    }
+
+    public function disapprove($id)
+    {
+        # code...
+        $payment = Payment::find($id);
+        $payment->status = 0;
+        $payment->save();
+         return redirect()->back()->with('success','Data updated successfully!');
     }
 }

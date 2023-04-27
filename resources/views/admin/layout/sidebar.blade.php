@@ -68,6 +68,12 @@
                   <p>My Profile</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{route('invitation_goal')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Invitation Goal</p>
+                </a>
+              </li>
               @else
               <li class="nav-item">
                 <a href="{{route('goal.index')}}" class="nav-link active">
@@ -86,10 +92,19 @@
                   <i class="far fa-circle nav-icon"></i>
                   <p>User</p>
                 </a>
+
               </li>
+
+
+              
               @endif
 
-      
+              <li class="nav-item">
+                <a href="{{route('payment.index')}}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Payment</p>
+                </a>
+              </li>
 
 
 
